@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/ebaeyens/git/oracle-rac","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}},"virtualbox":{"/vagrant/config":{"guestpath":"/vagrant/config","hostpath":"/home/ebaeyens/git/oracle-rac/config","disabled":false,"__vagrantfile":true}}}
