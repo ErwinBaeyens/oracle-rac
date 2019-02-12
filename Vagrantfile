@@ -29,43 +29,49 @@ Vagrant.configure("2") do |config|
     sudo firewall-cmd --reload
     SHELL
   end
-  config.vm.define "node-1" do |node-1|
-    node-1.vm.box = "centos/7"
-    node-1.vm.network "private_network", ip: "192.192.10.20"
-    node-1.vm.hostname = "node-1.lab.com"
-    node-1.vm.provider :virtualbox do |vb|
+  config.vm.define "node1" do |node1|
+    node1.vm.box = "centos/7"
+    node1.vm.network "private_network", ip: "192.192.10.20"
+    node1.vm.hostname = "node-1.lab.com"
+    node1.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "2048" ]
       vb.customize ["modifyvm", :id, "--cpus", "2" ]
     end
-    dns.vm.provision "shell", inline: <<-SHELL
+    node1.vm.provision "shell", inline: <<-SHELL
     sudo echo "192.168.10.20 racknode-1" | sudo tee -a /etc/hosts
     sudo echo "192.168.10.30 racknode-2" | sudo tee -a /etc/hosts
     sudo systemctl enable firewalld
     sudo systemctl start firewalld
     sudo firewall-cmd --permanent --add-service=ntp
-    sudo yum install -y ntp bind bind-utils  
+    sudo yum install -y ntp binutils libX11 compat-libcap1 libXau cpmpat-libstdc++33 libaio libaio-devel gcc libdmx
+    sudo yum install -y glibc-devel glibc ksh make libgcc sysstat libstdc++ xorg-x11-utils xorg-x11-auth libXext libXv
+    sudo yum install -y libXtst libXi libxcb libXt libXmu libXxf86misc libXxf86dga LibXxf86vm nfs-utils
     sudo timedatectl set-timezone Europe/Brussels
     sudo systemctl start ntpd
     sudo firewall-cmd --reload
     SHELL
   end
-   config.vm.define "node-1" do |node-2|
-     node-2.vm.box = "centos/7"
-     node-2.vm.network "private_network", ip: "192.192.10.30"
-     node-2.vm.hostname = "node-2.lab.com"
-     node-2.vm.provider :virtualbox do |vb|
+  config.vm.define "node2" do |node2|
+    node2.vm.box = "centos/7"
+    node2.vm.network "private_network", ip: "192.192.10.30"
+    node2.vm.hostname = "node-2.lab.com"
+    node2.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "2048" ]
       vb.customize ["modifyvm", :id, "--cpus", "2" ]
     end
-    dns.vm.provision "shell", inline: <<-SHELL
+    node2.vm.provision "shell", inline: <<-SHELL
     sudo echo "192.168.10.20 racknode-1" | sudo tee -a /etc/hosts
     sudo echo "192.168.10.30 racknode-2" | sudo tee -a /etc/hosts
     sudo systemctl enable firewalld
     sudo systemctl start firewalld
     sudo firewall-cmd --permanent --add-service=ntp
-    sudo yum install -y ntp bind bind-utils  
+    sudo yum install -y ntp binutils libX11 compat-libcap1 libXau cpmpat-libstdc++33 libaio libaio-devel gcc libdmx
+    sudo yum install -y glibc-devel glibc ksh make libgcc sysstat libstdc++ xorg-x11-utils xorg-x11-auth libXext libXv
+    sudo yum install -y libXtst libXi libxcb libXt libXmu libXxf86misc libXxf86dga LibXxf86vm nfs-utils
     sudo timedatectl set-timezone Europe/Brussels
     sudo systemctl start ntpd
     sudo firewall-cmd --reload
     SHELL
+  end
+  config.vm.synced_folder "config/", "/vagrant/config"
 end
