@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 # set some colours for the echo commands
 green=$(tput setaf 2)
@@ -37,17 +37,19 @@ firewall-cmd --reload
 
 # stop and disable avahi-daemon service
 echo "${bold}${green}stop and disable avahi-daemon service${reset}"
-if [ $(systemctl is-active --quiet avahi-dnsconfd) == 0 ]; then
+
+result=$(systemctl is-active avahi-dnsconfd)
+if [[ $result == "active" ]]; then
     systemctl stop avahi-dnsconfd
     systemctl stop avahi-daemon
+
+    systemctl disable avahi-dnsconfd
+    systemctl disable avahi-daemon
+
+    rm '/etc/systemd/system/dbus-org.freedesktop.Avahi.service'
+    rm '/etc/systemd/system/multi-user.target.wants/avahi-daemon.service'
+    rm '/etc/systemd/system/sockets.target.wants/avahi-daemon.socket'
 fi
-
-systemctl disable avahi-dnsconfd
-systemctl disable avahi-daemon
-
-rm '/etc/systemd/system/dbus-org.freedesktop.Avahi.service'
-rm '/etc/systemd/system/multi-user.target.wants/avahi-daemon.service'
-rm '/etc/systemd/system/sockets.target.wants/avahi-daemon.socket'
 
 # create the needed accounts and groups
 echo "${bold}${green}create the needed accounts and groups${reset}"
@@ -63,9 +65,8 @@ groupadd --gid 54328 dgdba
 groupadd --gid 54329 kmdba
 
 # create the needed users
-useradd --uid 54321 --gid oinstall --groups dba,oper,asmdba,asmoper,backupdba,dgdba,kmdba
-oracle
-: oswd oracle
+useradd --uid 54321 --gid oinstall --groups dba,oper,asmdba,asmoper,backupdba,dgdba,kmdba oracle
+passwd oracle
 useradd --uid 54321 --gid oinstall --groups dba,oper,asmdba,asmoper grid
 passwd grid
 
