@@ -17,7 +17,7 @@ echo "firewall settings"
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
 sudo firewall-cmd --permanent --add-service=ntp
-sudo firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4"source address=10.0.0.0/8" port protocol="tcp" port="1521" accept"
+sudo firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address=10.0.0.0/8" protocol="tcp" port="1521" accept"
 sudo firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4"source address=10.0.0.0/8" port protocol="tcp" port="5500 " accept"
 
 # enable and start ntpd
