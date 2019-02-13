@@ -37,8 +37,10 @@ firewall-cmd --reload
 
 # stop and disable avahi-daemon service
 echo "${bold}${green}stop and disable avahi-daemon service${reset}"
-systemctl stop avahi-dnsconfd
-systemctl stop avahi-daemon
+if [ $(systemctl is-active --quiet avahi-dnsconfd) == 0 ]; then
+    systemctl stop avahi-dnsconfd
+    systemctl stop avahi-daemon
+fi
 
 systemctl disable avahi-dnsconfd
 systemctl disable avahi-daemon
