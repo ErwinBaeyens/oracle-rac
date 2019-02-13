@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
   end
   config.vm.define "node1" do |node1|
     node1.vm.box = "centos/7"
-    node1.vm.network "private_network", ip: "192.192.10.20"
+    node1.vm.network "private_network", ip: "192.192.10.20",
     auto_config: false
     node1.vm.hostname = "node-1.lab.com"
     node1.vm.provider :virtualbox do |vb|
@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
   end
   config.vm.define "node2" do |node2|
     node2.vm.box = "centos/7"
-    node2.vm.network "private_network", ip: "192.192.10.30"
+    node2.vm.network "private_network", ip: "192.192.10.30",
     auto_config: false
     node2.vm.hostname = "node-2.lab.com"
     node2.vm.provider :virtualbox do |vb|
