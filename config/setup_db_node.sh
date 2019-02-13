@@ -3,8 +3,8 @@
 set -e
 
 # set some colours for the echo commands
-green=$(tput setaf2)
-red=$(tput setaf1)
+green=$(tput setaf 2)
+red=$(tput setaf 1)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
