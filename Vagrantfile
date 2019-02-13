@@ -15,19 +15,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "2" ]
     end
 
-    dns.vm.provision "shell", inline: <<-SHELL
-    sudo echo "192.168.10.20 racknode-1" | sudo tee -a /etc/hosts
-    sudo echo "192.168.10.30 racknode-2" | sudo tee -a /etc/hosts
-    sudo systemctl enable firewalld
-    sudo systemctl start firewalld
-    sudo firewall-cmd --permanent --zone=public --add-port=53/udp
-    sudo firewall-cmd --permanent --zone=public --add-port=53/udp
-    sudo firewall-cmd --permanent --add-service=ntp
-    sudo yum install -y ntp bind bind-utils  
-    sudo timedatectl set-timezone Europe/Brussels
-    sudo systemctl start ntpd
-    sudo firewall-cmd --reload
-    SHELL
+    dns.vm.provision "shell", path: 'config/setup_dns.sh', privileged: true
   end
   config.vm.define "node1" do |node1|
     node1.vm.box = "centos/7"
