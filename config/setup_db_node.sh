@@ -36,7 +36,7 @@ systemctl start ntpd
 firewall-cmd --reload
 
 # stop and disable avahi-daemon service
-echo"${bold}${green}stop and disable avahi-daemon service${reset}"
+echo "${bold}${green}stop and disable avahi-daemon service${reset}"
 systemctl stop avahi-dnsconfd
 systemctl stop avahi-daemon
 
