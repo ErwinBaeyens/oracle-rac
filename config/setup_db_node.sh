@@ -1,47 +1,54 @@
 #!/bin/bash
 
 set -e
-sudo echo "192.168.10.20 racknode-1" | sudo tee -a /etc/hosts
-sudo echo "192.168.10.30 racknode-2" | sudo tee -a /etc/hosts
+
+# set some colours for the echo commands
+green=$(tput setaf2)
+red=$(tput setaf1)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+echo "192.168.10.20 racknode-1" | tee -a /etc/hosts
+echo "192.168.10.30 racknode-2" | tee -a /etc/hosts
 
 # installation of needed packages
-echo "installation of needed packages"
-sudo yum groupinstall -y "Base"
-sudo yum groupinstall -y "Core"
-sudo yum install -y ntp binutils libX11 compat-libcap1 libXau cpmpat-libstdc++33 libaio libaio-devel gcc libdmx
-sudo yum install -y glibc-devel glibc ksh make libgcc sysstat libstdc++ xorg-x11-utils xorg-x11-auth libXext libXv
-sudo yum install -y libXtst libXi libxcb libXt libXmu libXxf86misc libXxf86dga LibXxf86vm nfs-utils
+echo "${bold}${green}installation of needed packages${reset}"
+yum groupinstall -y "Base"
+yum groupinstall -y "Core"
+yum install -y ntp binutils libX11 compat-libcap1 libXau cpmpat-libstdc++33 libaio libaio-devel gcc libdmx
+yum install -y glibc-devel glibc ksh make libgcc sysstat libstdc++ xorg-x11-utils xorg-x11-auth libXext libXv
+yum install -y libXtst libXi libxcb libXt libXmu libXxf86misc libXxf86dga LibXxf86vm nfs-utils
 
 # firewall settings
-echo "firewall settings"
-sudo systemctl enable firewalld
-sudo systemctl start firewalld
-sudo firewall-cmd --permanent --add-service=ntp
+echo "${bold}${green}firewall settings${reset}"
+systemctl enable firewalld
+systemctl start firewalld
+firewall-cmd --permanent --add-service=ntp
 
-firewall-cmd --permanent --zone=public --add-rich-rule 'rule family="ipv4" source address="10.0.0.0/8" port port=5500 protocol=tcp accept'
+# firewall-cmd --permanent --zone=public --add-rich-rule 'rule family="ipv4" source address="10.0.0.0/8" port port=5500 protocol=tcp accept'
 
-sudo firewall-cmd --permanent --zone=public --add-rich-rule 'rule family="ipv4" source address="10.0.0.0/8" port port="1521" protocol="tcp" accept'
+# firewall-cmd --permanent --zone=public --add-rich-rule 'rule family="ipv4" source address="10.0.0.0/8" port port="1521" protocol="tcp" accept'
 
 # enable and start ntpd
-echo " enable and start ntpd"
-sudo timedatectl set-timezone Europe/Brussels
-sudo systemctl start ntpd
-sudo firewall-cmd --reload
+echo "${bold}${green} enable and start ntpd${reset}"
+timedatectl set-timezone Europe/Brussels
+systemctl start ntpd
+firewall-cmd --reload
 
 # stop and disable avahi-daemon service
-echo"stop and disable avahi-daemon service"
-sudo systemctl stop avahi-dnsconfd
-sudo systemctl stop avahi-daemon
+echo"${bold}${green}stop and disable avahi-daemon service${reset}"
+systemctl stop avahi-dnsconfd
+systemctl stop avahi-daemon
 
-sudo systemctl disable avahi-dnsconfd
-sudo systemctl disable avahi-daemon
+systemctl disable avahi-dnsconfd
+systemctl disable avahi-daemon
 
 rm '/etc/systemd/system/dbus-org.freedesktop.Avahi.service'
 rm '/etc/systemd/system/multi-user.target.wants/avahi-daemon.service'
 rm '/etc/systemd/system/sockets.target.wants/avahi-daemon.socket'
 
 # create the needed accounts and groups
-echo "create the needed accounts and groups"
+echo "${bold}${green}create the needed accounts and groups${reset}"
 groupadd --gid 54321 oinstall
 groupadd --gid 54322 dba
 groupadd --gid 54323 asmdba
