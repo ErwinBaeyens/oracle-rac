@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--memory", "2048" ]
       vb.customize ["modifyvm", :id, "--cpus", "2" ]
     end
-    node1.vm.provision "shell", path: 'config/setup_db_node.sh', privileged: true
+    # node1.vm.provision "shell", path: 'config/setup_db_node.sh', privileged: true
   end
   config.vm.define "node2" do |node2|
     node2.vm.box = "centos/7"
@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--memory", "2048" ]
       vb.customize ["modifyvm", :id, "--cpus", "2" ]
     end
-    node2.vm.provision "shell", path: 'config/setup_db_node.sh', privileged: true
+    # node2.vm.provision "shell", path: 'config/setup_db_node.sh', privileged: true
   end
   config.vm.synced_folder "config/", "/vagrant/config"
 end
